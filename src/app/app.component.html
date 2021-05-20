@@ -1,1 +1,28 @@
-<h1>SuperOps</h1>
+<mat-toolbar color="primary">
+  <div class="container">
+    <button mat-icon-button class="menu-icon" aria-label="icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Messages</span>
+  </div>
+</mat-toolbar>
+
+<section class="container card__wrapper">
+  <mat-card class="card" *ngFor="let message of messages">
+    <mat-card-header>
+      <div mat-card-avatar class="card__header-image">
+        <!-- <img mat-card-image [src]="message.author.photoUrl" alt="message.author.name"> -->
+        <img mat-card-image src="https://picsum.photos/40/40" alt="message.author.name">
+      </div>
+      <mat-card-title>{{message.author.name}}</mat-card-title>
+      <mat-card-subtitle>{{message.updated}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{message.content}}</p>
+    </mat-card-content>
+  </mat-card>
+</section>
+
+<section #loader class="loader" [class.show]="this.isLoadingMessages">
+  <mat-spinner></mat-spinner>
+</section>
