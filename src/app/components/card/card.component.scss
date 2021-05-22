@@ -1,0 +1,34 @@
+:host {
+    margin: 16px 8px;
+    .wrapper{
+        display: flex;
+        margin-top: 48px;
+        position: relative;
+    }
+
+    .card {
+        transition: all 0.2s ease-out;
+        position: relative;
+        z-index: 1;
+        cursor: pointer;
+        &__button {
+            position: absolute;
+            top: 0;
+            height: 100%;
+
+            &.delete {
+                left: 0;
+            }
+            &.edit {
+                right: 0;
+            }
+        }
+    }
+}
+
+
+::ng-deep {
+    .mat-card-avatar {
+        overflow: hidden;
+    }
+}

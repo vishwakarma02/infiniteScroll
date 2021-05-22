@@ -8,19 +8,15 @@
 </mat-toolbar>
 
 <section class="container card__wrapper">
-  <mat-card class="card" *ngFor="let message of messages">
-    <mat-card-header>
-      <div mat-card-avatar class="card__header-image">
-        <!-- <img mat-card-image [src]="message.author.photoUrl" alt="message.author.name"> -->
-        <img mat-card-image src="https://picsum.photos/40/40" alt="message.author.name">
-      </div>
-      <mat-card-title>{{message.author.name}}</mat-card-title>
-      <mat-card-subtitle>{{message.updated}}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>{{message.content}}</p>
-    </mat-card-content>
-  </mat-card>
+  <ng-container *ngFor="let message of messages">
+    <!-- message.author.photoUrl -->
+    <app-card
+      [author]="message.author.name"
+      [content]="message.content"
+      [photoUrl]="'https://picsum.photos/40/40'"
+      [updatedAt]="message.updated"
+    ></app-card>
+  </ng-container>
 </section>
 
 <section #loader class="loader" [class.show]="this.isLoadingMessages">

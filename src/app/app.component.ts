@@ -49,6 +49,3 @@ export class AppComponent implements OnInit {
     }
   }
 }
-
-
-// http://message-list.appspot.com/messages.

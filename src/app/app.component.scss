@@ -12,13 +12,6 @@
             max-width: 720px;
         }
     }
-    
-    .card{
-        margin: 16px 8px;
-        &__wrapper{
-            margin-top: 48px;
-        }
-    }
 
     .loader{
         display: flex;
@@ -28,12 +21,6 @@
 
         &.show {
             transform: scale(1);
-        }
-    }
-    
-    ::ng-deep {
-        .mat-card-avatar {
-            overflow: hidden;
         }
     }
 }
