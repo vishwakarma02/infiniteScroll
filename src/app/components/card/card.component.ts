@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -7,52 +7,99 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 })
 export class CardComponent implements OnInit {
 
-  card: HTMLElement | undefined;
   mouseDown = false;
   startX = 0;
   endX = 0;
   threshold = 100;
   dragTravel = 0;
-  dragDirection = '';
   isTouchEnabled: boolean = false;
+  blockVertialSwipeIfDragValueIs = 20;
 
   @Input() author: string = '';
   @Input() content: string = '';
   @Input() photoUrl: string = '';
   @Input() updatedAt: string = '';
 
-  @ViewChild('card')
-  set pane(el: ElementRef) {
-    this.card = el.nativeElement;
-  }
+  @Output() swiping = new EventEmitter<boolean>();
 
   get dragTravelCssValue(): string {
     return `translate( ${this.dragTravel}px )`;
   }
 
-  constructor() { }
+  @HostListener("mousedown", ['$event'])
+  @HostListener("mouseup", ["$event"])
+  @HostListener("mousemove", ["$event"])
+  handleClick(event: MouseEvent): void {
+    if (this.isTouchEnabled) {
+      return;
+    }
+    switch (event.type) {
+      case 'mousedown': {
+        this.pointerDown(event.screenX);
+        break;
+      }
+      case 'mouseup': {
+        this.pointerUp(event.screenX);
+        break;
+      }
+      case 'mousemove': {
+        this.pointerMove(event.screenX);
+        break;
+      }
+    }
+  }
+
+  @HostListener("touchstart", ["$event"])
+  @HostListener("touchend", ["$event"])
+  @HostListener("touchmove", ["$event"])
+  @HostListener("touch", ["$event"])
+  handleTouch(event: TouchEvent): void {
+    if (!this.isTouchEnabled) {
+      return;
+    }
+
+    switch (event.type) {
+      case 'touchstart': {
+        this.pointerDown(event.changedTouches[0].screenX);
+        break;
+      }
+      case 'touchend': {
+        this.pointerUp(event.changedTouches[0].screenX);
+        break;
+      }
+      case 'touchmove': {
+        this.pointerMove(event.changedTouches[0].screenX);
+        break;
+      }
+    }
+  }
+
+  @HostListener("document:click", ['$event'])
+  @HostListener("document:touch", ["$event"])
+  handleClickOutside(event: TouchEvent | MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!this.elRef.nativeElement.contains(target.closest('.card'))) {
+      this.dragTravel = 0;
+    }
+  }
+
+  constructor(protected elRef: ElementRef) { }
 
   ngOnInit(): void {
-    this.isTouchEnabled =  ( 'ontouchstart' in window ) || 
-             ( navigator.maxTouchPoints > 0 ) || 
-             ( navigator.msMaxTouchPoints > 0 );
+    this.isTouchEnabled = ('ontouchstart' in window) ||
+      (navigator.maxTouchPoints > 0) ||
+      (navigator.msMaxTouchPoints > 0);
   }
 
-  public handleMouseDown(event:any): void {
-    if (this.isTouchEnabled) {
-      return;
-    }
+  protected pointerDown(positionX: number): void {
     this.mouseDown = true;
-    this.startX = event.screenX;
+    this.startX = positionX;
   }
 
-  public handleMouseUp(event:any): void {
-    if (this.isTouchEnabled) {
-      return;
-    }
+  protected pointerUp(positionX: number): void {
     this.mouseDown = false;
-    this.endX = event.screenX;
-    if ( Math.abs(this.dragTravel) > this.threshold) {
+    this.endX = positionX;
+    if (Math.abs(this.dragTravel) > this.threshold) {
       if (this.dragTravel > 0) {
         this.dragTravel = 64;
       } else {
@@ -61,66 +108,20 @@ export class CardComponent implements OnInit {
     } else {
       this.dragTravel = 0;
     }
-    console.log(event.screenX);
   }
 
-  public handleMouseMove(event:any): void {
-    event.stopPropagation();
-    if (this.isTouchEnabled) {
-      return;
-    }
-    if (this.mouseDown){
-      this.dragTravel = event.screenX - this.startX;
+  protected pointerMove(positionX: number): void {
+    if (this.mouseDown) {
+      this.dragTravel = positionX - this.startX;
+      this.swiping.emit(Math.abs(this.dragTravel) > this.blockVertialSwipeIfDragValueIs);
     }
   }
 
-  public editMessage(event: any): void {
-    event.stopPropagation();
+  public editMessage(event: MouseEvent | TouchEvent): void {
     console.log('edit');
   }
 
-  public deleteMessage(event: any): void {
-    event.stopPropagation();
+  public deleteMessage(event: MouseEvent | TouchEvent): void {
     console.log('delete');
-  }
-
-  public handleTouchMove(event:any): void {
-    event.stopPropagation();
-    if (!this.isTouchEnabled) {
-      return;
-    }
-    console.log(event);
-    if(this.mouseDown) {
-      this.dragTravel = event.changedTouches[0].screenX - this.startX;
-    }
-  }
-
-  public handleTouchStart(event:any): void {
-    event.stopPropagation();
-    if (!this.isTouchEnabled) {
-      return;
-    }
-    this.mouseDown = true;
-    this.startX = event.changedTouches[0].screenX;
-    console.log('touch start', event);
-  }
-
-  public handleTouchEnd(event:any): void {
-    event.stopPropagation();
-    if (!this.isTouchEnabled) {
-      return;
-    }
-    this.mouseDown = false;
-    this.endX = event.changedTouches[0].screenX;    
-    if ( Math.abs(this.dragTravel) > this.threshold) {
-      if (this.dragTravel > 0) {
-        this.dragTravel = 64;
-      } else {
-        this.dragTravel = -64;
-      }
-    } else {
-      this.dragTravel = 0;
-    }
-    console.log('touch end', event);
   }
 }

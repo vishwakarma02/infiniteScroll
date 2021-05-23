@@ -7,7 +7,8 @@
   </div>
 </mat-toolbar>
 
-<section class="container card__wrapper">
+<section class="container card__wrapper"
+  [class.overflow-hidden]="isSwiping">
   <ng-container *ngFor="let message of messages">
     <!-- message.author.photoUrl -->
     <app-card
@@ -15,6 +16,7 @@
       [content]="message.content"
       [photoUrl]="'https://picsum.photos/40/40'"
       [updatedAt]="message.updated"
+      (swiping)="isSwiping = $event"
     ></app-card>
   </ng-container>
 </section>

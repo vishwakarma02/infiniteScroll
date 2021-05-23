@@ -1,35 +1,15 @@
-<div
-    class="wrapper"
-    (mouseup)="handleMouseUp($event)"
-    (mousedown)="handleMouseDown($event)"
-    (mousemove)="handleMouseMove($event)"
-    (touchstart)="handleTouchStart($event)"
-    (touchmove)="handleTouchMove($event)"
-    (touchend)="handleTouchEnd($event)">
-    <button
-        mat-raised-button 
-        color="warn"
-        class="card__button delete"
-        (click)="deleteMessage($event)">Delete</button>
-    <mat-card
-        class="card"
-        #card
-        [style.transform]="dragTravelCssValue">
-        <mat-card-header>
-            <div mat-card-avatar class="card__header-image">
-                <!-- <img mat-card-image [src]="message.author.photoUrl" alt="message.author.name"> -->
-                <img mat-card-image src="https://picsum.photos/40/40" alt="author">
-            </div>
-            <mat-card-title>{{author}}</mat-card-title>
-            <mat-card-subtitle>{{updatedAt}}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-            <p>{{content}}</p>
-        </mat-card-content>
-    </mat-card>
-    <button
-        mat-raised-button 
-        color="primary"
-        class="card__button edit"
-        (click)="editMessage($event)">Edit</button>
-</div>
+<button mat-raised-button color="warn" class="card__button delete" (click)="deleteMessage($event)">Delete</button>
+<mat-card class="card" [style.transform]="dragTravelCssValue">
+    <mat-card-header>
+        <div mat-card-avatar class="card__header-image">
+            <!-- <img mat-card-image [src]="message.author.photoUrl" alt="message.author.name"> -->
+            <img mat-card-image src="https://picsum.photos/40/40" alt="author">
+        </div>
+        <mat-card-title>{{author}}</mat-card-title>
+        <mat-card-subtitle>{{updatedAt}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <p>{{content}}</p>
+    </mat-card-content>
+</mat-card>
+<button mat-raised-button color="primary" class="card__button edit" (click)="editMessage($event)">Edit</button>

@@ -1,12 +1,24 @@
 :host {
     background-color: #e6e6e6;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    .overflow-hidden {
+        overflow: hidden !important;
+    }
+
+    mat-toolbar {
+        min-height: 56px;
+    }
     
     .container {
+        flex-grow: 1;
         margin-left: auto;
         margin-right: auto;
         width: 100%;
         max-width: 576px;
+        overflow: auto;
     
         @media (min-width: 768px) {
             max-width: 720px;
@@ -18,9 +30,11 @@
         justify-content: center;
         transform: scale(0);
         transition: all 0.2s ease-out;
+        height: 0;
 
         &.show {
             transform: scale(1);
+            height: initial;
         }
     }
 }
