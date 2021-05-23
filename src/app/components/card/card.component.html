@@ -2,10 +2,13 @@
     class="wrapper"
     (mouseup)="handleMouseUp($event)"
     (mousedown)="handleMouseDown($event)"
-    (mousemove)="handleMouseMove($event)">
+    (mousemove)="handleMouseMove($event)"
+    (touchstart)="handleTouchStart($event)"
+    (touchmove)="handleTouchMove($event)"
+    (touchend)="handleTouchEnd($event)">
     <button
         mat-raised-button 
-        color="primary"
+        color="warn"
         class="card__button delete"
         (click)="deleteMessage($event)">Delete</button>
     <mat-card
@@ -26,7 +29,7 @@
     </mat-card>
     <button
         mat-raised-button 
-        color="warn"
+        color="primary"
         class="card__button edit"
         (click)="editMessage($event)">Edit</button>
 </div>

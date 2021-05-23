@@ -14,6 +14,7 @@ export class CardComponent implements OnInit {
   threshold = 100;
   dragTravel = 0;
   dragDirection = '';
+  isTouchEnabled: boolean = false;
 
   @Input() author: string = '';
   @Input() content: string = '';
@@ -32,14 +33,23 @@ export class CardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.isTouchEnabled =  ( 'ontouchstart' in window ) || 
+             ( navigator.maxTouchPoints > 0 ) || 
+             ( navigator.msMaxTouchPoints > 0 );
   }
 
   public handleMouseDown(event:any): void {
+    if (this.isTouchEnabled) {
+      return;
+    }
     this.mouseDown = true;
     this.startX = event.screenX;
   }
 
   public handleMouseUp(event:any): void {
+    if (this.isTouchEnabled) {
+      return;
+    }
     this.mouseDown = false;
     this.endX = event.screenX;
     if ( Math.abs(this.dragTravel) > this.threshold) {
@@ -55,6 +65,10 @@ export class CardComponent implements OnInit {
   }
 
   public handleMouseMove(event:any): void {
+    event.stopPropagation();
+    if (this.isTouchEnabled) {
+      return;
+    }
     if (this.mouseDown){
       this.dragTravel = event.screenX - this.startX;
     }
@@ -68,5 +82,45 @@ export class CardComponent implements OnInit {
   public deleteMessage(event: any): void {
     event.stopPropagation();
     console.log('delete');
+  }
+
+  public handleTouchMove(event:any): void {
+    event.stopPropagation();
+    if (!this.isTouchEnabled) {
+      return;
+    }
+    console.log(event);
+    if(this.mouseDown) {
+      this.dragTravel = event.changedTouches[0].screenX - this.startX;
+    }
+  }
+
+  public handleTouchStart(event:any): void {
+    event.stopPropagation();
+    if (!this.isTouchEnabled) {
+      return;
+    }
+    this.mouseDown = true;
+    this.startX = event.changedTouches[0].screenX;
+    console.log('touch start', event);
+  }
+
+  public handleTouchEnd(event:any): void {
+    event.stopPropagation();
+    if (!this.isTouchEnabled) {
+      return;
+    }
+    this.mouseDown = false;
+    this.endX = event.changedTouches[0].screenX;    
+    if ( Math.abs(this.dragTravel) > this.threshold) {
+      if (this.dragTravel > 0) {
+        this.dragTravel = 64;
+      } else {
+        this.dragTravel = -64;
+      }
+    } else {
+      this.dragTravel = 0;
+    }
+    console.log('touch end', event);
   }
 }
