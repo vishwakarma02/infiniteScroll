@@ -13,11 +13,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MessagesService } from './services/messages.service';
 import { CardComponent } from './components/card/card.component';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CardComponent
+    CardComponent,
+    DateAgoPipe
   ],
   imports: [
     BrowserModule,

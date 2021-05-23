@@ -6,7 +6,7 @@
             <img mat-card-image src="https://picsum.photos/40/40" alt="author">
         </div>
         <mat-card-title>{{author}}</mat-card-title>
-        <mat-card-subtitle>{{updatedAt}}</mat-card-subtitle>
+        <mat-card-subtitle>{{updatedAt | dateAgo }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         <p>{{content}}</p>
