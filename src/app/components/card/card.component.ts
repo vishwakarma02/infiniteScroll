@@ -27,6 +27,9 @@ export class CardComponent implements OnInit {
   get dragTravelCssValue(): string {
     return `translate( ${this.dragTravel}px )`;
   }
+  get widthCssValue(): string {
+    return `calc(100% - ${this.dragTravel}px )`;
+  }
 
   get buttonWidth(): string {
     return `${Math.abs(this.dragTravel - 4)}px`;
