@@ -9,7 +9,7 @@
     .card {
         position: relative;
         z-index: 1;
-        cursor: move;
+        cursor: grab;
         width: 100%;
         &__button {
             position: absolute;

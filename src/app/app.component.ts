@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Message } from './models/message.i';
 import { MessagesService } from './services/messages.service';
 
@@ -19,7 +20,10 @@ export class AppComponent implements OnInit {
 
   @ViewChild('loader') loader!: ElementRef;
 
-  constructor(protected _service: MessagesService) { }
+  constructor(
+      protected _service: MessagesService,
+      protected _snackBar: MatSnackBar
+    ) { }
 
   ngOnInit(): void {
     this.getMessages();
@@ -59,6 +63,6 @@ export class AppComponent implements OnInit {
   }
 
   public editPost(id: number): void {
-    alert('edit');
+    this._snackBar.open('Item Edited');
   }
 }
