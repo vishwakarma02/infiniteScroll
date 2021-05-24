@@ -2,7 +2,8 @@
     mat-raised-button
     color="warn"
     class="card__button delete"
-    (click)="deleteMessage($event)"
+    (click)="deleteMessage()"
+    (touch)="deleteMessage()"
     [style.width]="buttonWidth">
         <mat-icon>delete</mat-icon>
         Delete
@@ -10,15 +11,21 @@
 
 <mat-card
     class="card"
-    [style.transform]="dragTravelCssValue">
+    [style.transform]="dragTravelCssValue"
+    (mousedown)="handleClick($event)"
+    (mouseup)="handleClick($event)"
+    (mousemove)="handleClick($event)"
+    (touchstart)="handleTouch($event)"
+    (touchend)="handleTouch($event)"
+    (touchmove)="handleTouch($event)"
+    >
     <mat-card-header>
         <div
             mat-card-avatar
             class="card__header-image">
-            <!-- <img mat-card-image [src]="message.author.photoUrl" alt="message.author.name"> -->
             <img
                 mat-card-image
-                src="https://picsum.photos/40/40"
+                src="photoUrl"
                 alt="author">
         </div>
         <mat-card-title>{{author}}</mat-card-title>
@@ -33,7 +40,8 @@
     mat-raised-button
     color="primary"
     class="card__button edit"
-    (click)="editMessage($event)"
+    (click)="editMessage()"
+    (touch)="editMessage()"
     [style.width]="buttonWidth">
         <mat-icon>edit</mat-icon>
         Edit

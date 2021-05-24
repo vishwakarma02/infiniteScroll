@@ -4,6 +4,14 @@
     flex-direction: column;
     height: 100vh;
 
+    .d-flex {
+        display: flex;
+    }
+
+    .align-items-center {
+        align-items: center;
+    }
+
     .overflow-hidden {
         overflow: hidden !important;
     }
@@ -26,6 +34,16 @@
         &.show {
             transform: scale(1);
             height: initial;
+        }
+    }
+}
+
+::ng-deep {
+    mat-toolbar {
+        .mat-icon-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 }

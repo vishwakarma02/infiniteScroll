@@ -1,9 +1,10 @@
 <mat-toolbar color="primary">
-  <div class="container">
+  <div class="container d-flex align-items-center">
     <button
     mat-icon-button
     class="menu-icon"
-    aria-label="icon-button with menu icon">
+    aria-label="icon-button with menu icon"
+    (click)="handleMenuToggle()">
       <mat-icon>menu</mat-icon>
     </button>
     <span>Messages</span>
@@ -11,12 +12,13 @@
 </mat-toolbar>
 
 <section (scroll)="getOffsetTop()" class="container card__wrapper">
-  <ng-container *ngFor="let message of messages">
+  <ng-container *ngFor="let message of messages; trackBy:identifyById">
     <!-- message.author.photoUrl -->
+    <!-- 'https://picsum.photos/40/40' -->
     <app-card
       [author]="message.author.name"
       [content]="message.content"
-      [photoUrl]="'https://picsum.photos/40/40'"
+      [photoUrl]="message.author.photoUrl"
       [updatedAt]="message.updated"
       (swiping)="isSwiping = $event"
       (delete)="deletePost(message.id)"

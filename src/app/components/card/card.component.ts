@@ -32,9 +32,70 @@ export class CardComponent implements OnInit {
     return `${Math.abs(this.dragTravel - 4)}px`;
   }
 
-  @HostListener("mousedown", ['$event'])
-  @HostListener("mouseup", ["$event"])
-  @HostListener("mousemove", ["$event"])
+  // @HostListener("mousedown", ['$event'])
+  // @HostListener("mouseup", ["$event"])
+  // @HostListener("mousemove", ["$event"])
+  // handleClick(event: MouseEvent): void {
+  //   if (this.isTouchEnabled) {
+  //     return;
+  //   }
+  //   switch (event.type) {
+  //     case 'mousedown': {
+  //       this.pointerDown(event.screenX);
+  //       break;
+  //     }
+  //     case 'mouseup': {
+  //       this.pointerUp(event.screenX);
+  //       break;
+  //     }
+  //     case 'mousemove': {
+  //       this.pointerMove(event.screenX);
+  //       break;
+  //     }
+  //   }
+  // }
+
+  // @HostListener("touchstart", ["$event"])
+  // @HostListener("touchend", ["$event"])
+  // @HostListener("touchmove", ["$event"])
+  // handleTouch(event: TouchEvent): void {
+  //   if (!this.isTouchEnabled) {
+  //     return;
+  //   }
+
+  //   switch (event.type) {
+  //     case 'touchstart': {
+  //       this.pointerDown(event.changedTouches[0].screenX);
+  //       break;
+  //     }
+  //     case 'touchend': {
+  //       this.pointerUp(event.changedTouches[0].screenX);
+  //       break;
+  //     }
+  //     case 'touchmove': {
+  //       this.pointerMove(event.changedTouches[0].screenX);
+  //       break;
+  //     }
+  //   }
+  // }
+
+  @HostListener("document:click", ['$event'])
+  @HostListener("document:touch", ["$event"])
+  handleClickOutside(event: TouchEvent | MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!this.elRef.nativeElement.contains(target.closest('.card'))) {
+      this.dragTravel = 0;
+    }
+  }
+
+  constructor(protected elRef: ElementRef) { }
+
+  ngOnInit(): void {
+    this.isTouchEnabled = ('ontouchstart' in window) ||
+      (navigator.maxTouchPoints > 0) ||
+      (navigator.msMaxTouchPoints > 0);
+  }
+
   handleClick(event: MouseEvent): void {
     if (this.isTouchEnabled) {
       return;
@@ -55,10 +116,6 @@ export class CardComponent implements OnInit {
     }
   }
 
-  @HostListener("touchstart", ["$event"])
-  @HostListener("touchend", ["$event"])
-  @HostListener("touchmove", ["$event"])
-  @HostListener("touch", ["$event"])
   handleTouch(event: TouchEvent): void {
     if (!this.isTouchEnabled) {
       return;
@@ -78,23 +135,6 @@ export class CardComponent implements OnInit {
         break;
       }
     }
-  }
-
-  @HostListener("document:click", ['$event'])
-  @HostListener("document:touch", ["$event"])
-  handleClickOutside(event: TouchEvent | MouseEvent): void {
-    const target = event.target as HTMLElement;
-    if (!this.elRef.nativeElement.contains(target.closest('.card'))) {
-      this.dragTravel = 0;
-    }
-  }
-
-  constructor(protected elRef: ElementRef) { }
-
-  ngOnInit(): void {
-    this.isTouchEnabled = ('ontouchstart' in window) ||
-      (navigator.maxTouchPoints > 0) ||
-      (navigator.msMaxTouchPoints > 0);
   }
 
   protected pointerDown(positionX: number): void {
@@ -128,15 +168,13 @@ export class CardComponent implements OnInit {
     }
   }
 
-  public editMessage(event: MouseEvent | TouchEvent): void {
-    event.stopPropagation();
-    console.log('edit')
+  public editMessage(): void {
+    console.log('edit');
     this.edit.emit();
   }
 
-  public deleteMessage(event: MouseEvent | TouchEvent): void {
-    event.stopPropagation();
-    console.log('delete')
+  public deleteMessage(): void {
+    console.log('delete');
     this.delete.emit();
   }
 }

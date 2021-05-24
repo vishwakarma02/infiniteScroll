@@ -32,15 +32,20 @@ export class AppComponent implements OnInit {
 
   getMessages(): void {
     this.isLoadingMessages = true;
-    // const messageUrl = `http://message-list.appspot.com/messages${this.pageToken}`;
-    this._service.getResponse('http://message-list.appspot.com/messages').subscribe(res => {
-      this.messages = [...this.messages, ...res.messages];
-      // this.pageToken = `/${res.pageToken}`;
-      this.pageToken = '';
-      this.isLoadingMessages = false;
-    });
+    const messageUrl = `http://message-list.appspot.com/messages${this.pageToken}`;
+    this._service.getResponse(messageUrl).subscribe(
+      res => {
+        this.messages = [...this.messages, ...res.messages];
+        this.pageToken = `/${res.pageToken}`;
+        this.isLoadingMessages = false;
+      },
+      error => {
+        this._snackBar.open('API Failed');
+        this.isLoadingMessages = false;
+      }
+    );
 
-    // // dummy response
+    // // dummy response for hosting and testing
     // this.isLoadingMessages = true;
     // this.messages = [...this.messages, ...this.dummyResponse.messages];
     // // this.pageToken = `/${res.pageToken}`;
@@ -60,9 +65,18 @@ export class AppComponent implements OnInit {
 
   public deletePost(id: number): void {
     this.messages = this.messages.filter(m => m.id !== id);
+    this._snackBar.open('Item Deleted', 'Dismiss', {duration: 3000});
   }
 
   public editPost(id: number): void {
-    this._snackBar.open('Item Edited');
+    this._snackBar.open('Item Edited', 'Dismiss', {duration: 3000});
+  }
+
+  handleMenuToggle(): void {
+    this._snackBar.open('Menu Clicked', 'Dismiss', {duration: 3000});
+  }
+
+  identifyById(index: any, item: any) {
+    return item.id;
   }
 }
