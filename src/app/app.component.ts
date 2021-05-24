@@ -31,26 +31,25 @@ export class AppComponent implements OnInit {
   }
 
   getMessages(): void {
-    this.isLoadingMessages = true;
-    const messageUrl = `http://message-list.appspot.com/messages?pageToken=${this.pageToken}`;
-    this._service.getResponse(messageUrl).subscribe(
-      res => {
-        this.messages = [...this.messages, ...res.messages];
-        this.pageToken = res.pageToken;
-        this.isLoadingMessages = false;
-      },
-      error => {
-        this._snackBar.open('API Failed');
-        this.isLoadingMessages = false;
-      }
-    );
-
-    // // dummy response for hosting and testing
     // this.isLoadingMessages = true;
-    // this.messages = [...this.messages, ...this.dummyResponse.messages];
-    // // this.pageToken = `/${res.pageToken}`;
-    // this.pageToken = '';
-    // this.isLoadingMessages = false;
+    // const messageUrl = `http://message-list.appspot.com/messages?pageToken=${this.pageToken}`;
+    // this._service.getResponse(messageUrl).subscribe(
+    //   res => {
+    //     this.messages = [...this.messages, ...res.messages];
+    //     this.pageToken = res.pageToken;
+    //     this.isLoadingMessages = false;
+    //   },
+    //   error => {
+    //     this._snackBar.open('API Failed');
+    //     this.isLoadingMessages = false;
+    //   }
+    // );
+
+    // dummy response for hosting and testing
+    this.isLoadingMessages = true;
+    this.messages = [...this.messages, ...this.dummyResponse.messages];
+    this.pageToken = '';
+    this.isLoadingMessages = false;
   }
 
   getOffsetTop() {
