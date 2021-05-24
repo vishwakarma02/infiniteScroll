@@ -1,14 +1,16 @@
 <mat-toolbar color="primary">
   <div class="container">
-    <button mat-icon-button class="menu-icon" aria-label="icon-button with menu icon">
+    <button
+    mat-icon-button
+    class="menu-icon"
+    aria-label="icon-button with menu icon">
       <mat-icon>menu</mat-icon>
     </button>
     <span>Messages</span>
   </div>
 </mat-toolbar>
 
-<section class="container card__wrapper"
-  [class.overflow-hidden]="isSwiping">
+<section (scroll)="getOffsetTop()" class="container card__wrapper">
   <ng-container *ngFor="let message of messages">
     <!-- message.author.photoUrl -->
     <app-card
@@ -17,10 +19,11 @@
       [photoUrl]="'https://picsum.photos/40/40'"
       [updatedAt]="message.updated"
       (swiping)="isSwiping = $event"
+      (delete)="deletePost(message.id)"
+      (edit)="editPost(message.id)"
     ></app-card>
   </ng-container>
-</section>
-
-<section #loader class="loader" [class.show]="this.isLoadingMessages">
-  <mat-spinner></mat-spinner>
+  <div #loader class="loader" [class.show]="this.isLoadingMessages">
+    <mat-spinner></mat-spinner>
+  </div>
 </section>

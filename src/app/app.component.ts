@@ -19,11 +19,6 @@ export class AppComponent implements OnInit {
 
   @ViewChild('loader') loader!: ElementRef;
 
-  @HostListener('document:scroll', ['$event'])
-  scrolled(): void {
-    this.getOffsetTop();
-  }
-
   constructor(protected _service: MessagesService) { }
 
   ngOnInit(): void {
@@ -32,21 +27,21 @@ export class AppComponent implements OnInit {
   }
 
   getMessages(): void {
-    // this.isLoadingMessages = true;
-    // const messageUrl = `http://message-list.appspot.com/messages${this.pageToken}`;
-    // this._service.getResponse(messageUrl).subscribe(res => {
-    //   this.messages = [...this.messages, ...res.messages];
-    //   // this.pageToken = `/${res.pageToken}`;
-    //   this.pageToken = '';
-    //   this.isLoadingMessages = false;
-    // });
-
-    // dummy response
     this.isLoadingMessages = true;
-    this.messages = [...this.messages, ...this.dummyResponse.messages];
-    // this.pageToken = `/${res.pageToken}`;
-    this.pageToken = '';
-    this.isLoadingMessages = false;
+    // const messageUrl = `http://message-list.appspot.com/messages${this.pageToken}`;
+    this._service.getResponse('http://message-list.appspot.com/messages').subscribe(res => {
+      this.messages = [...this.messages, ...res.messages];
+      // this.pageToken = `/${res.pageToken}`;
+      this.pageToken = '';
+      this.isLoadingMessages = false;
+    });
+
+    // // dummy response
+    // this.isLoadingMessages = true;
+    // this.messages = [...this.messages, ...this.dummyResponse.messages];
+    // // this.pageToken = `/${res.pageToken}`;
+    // this.pageToken = '';
+    // this.isLoadingMessages = false;
   }
 
   getOffsetTop() {
@@ -57,5 +52,13 @@ export class AppComponent implements OnInit {
     if (!this.isLoadingMessages && loaderOffsetTop < trigger) {
       this.getMessages();
     }
+  }
+
+  public deletePost(id: number): void {
+    this.messages = this.messages.filter(m => m.id !== id);
+  }
+
+  public editPost(id: number): void {
+    alert('edit');
   }
 }

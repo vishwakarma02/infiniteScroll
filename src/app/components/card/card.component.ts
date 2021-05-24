@@ -21,9 +21,15 @@ export class CardComponent implements OnInit {
   @Input() updatedAt: string = '';
 
   @Output() swiping = new EventEmitter<boolean>();
+  @Output() delete = new EventEmitter();
+  @Output() edit = new EventEmitter();
 
   get dragTravelCssValue(): string {
     return `translate( ${this.dragTravel}px )`;
+  }
+
+  get buttonWidth(): string {
+    return `${Math.abs(this.dragTravel - 4)}px`;
   }
 
   @HostListener("mousedown", ['$event'])
@@ -101,9 +107,9 @@ export class CardComponent implements OnInit {
     this.endX = positionX;
     if (Math.abs(this.dragTravel) > this.threshold) {
       if (this.dragTravel > 0) {
-        this.dragTravel = 64;
+        this.dragTravel = this.threshold;
       } else {
-        this.dragTravel = -64;
+        this.dragTravel = -this.threshold;
       }
     } else {
       this.dragTravel = 0;
@@ -112,16 +118,25 @@ export class CardComponent implements OnInit {
 
   protected pointerMove(positionX: number): void {
     if (this.mouseDown) {
-      this.dragTravel = positionX - this.startX;
-      this.swiping.emit(Math.abs(this.dragTravel) > this.blockVertialSwipeIfDragValueIs);
+      const temp = positionX - this.startX;
+      if (Math.abs(temp) > 104) {
+        this.dragTravel = temp > 0 ? 104 : -104;
+      } else {
+        this.dragTravel = positionX - this.startX;
+      }
+      // this.swiping.emit(Math.abs(this.dragTravel) > this.blockVertialSwipeIfDragValueIs);
     }
   }
 
   public editMessage(event: MouseEvent | TouchEvent): void {
-    console.log('edit');
+    event.stopPropagation();
+    console.log('edit')
+    this.edit.emit();
   }
 
   public deleteMessage(event: MouseEvent | TouchEvent): void {
-    console.log('delete');
+    event.stopPropagation();
+    console.log('delete')
+    this.delete.emit();
   }
 }
