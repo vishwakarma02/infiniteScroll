@@ -32,11 +32,11 @@ export class AppComponent implements OnInit {
 
   getMessages(): void {
     this.isLoadingMessages = true;
-    const messageUrl = `http://message-list.appspot.com/messages${this.pageToken}`;
+    const messageUrl = `http://message-list.appspot.com/messages?pageToken=${this.pageToken}`;
     this._service.getResponse(messageUrl).subscribe(
       res => {
         this.messages = [...this.messages, ...res.messages];
-        this.pageToken = `/${res.pageToken}`;
+        this.pageToken = res.pageToken;
         this.isLoadingMessages = false;
       },
       error => {

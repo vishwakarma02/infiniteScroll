@@ -20,67 +20,19 @@ export class CardComponent implements OnInit {
   @Input() photoUrl: string = '';
   @Input() updatedAt: string = '';
 
-  @Output() swiping = new EventEmitter<boolean>();
   @Output() delete = new EventEmitter();
   @Output() edit = new EventEmitter();
 
   get dragTravelCssValue(): string {
     return `translate( ${this.dragTravel}px )`;
   }
-  get widthCssValue(): string {
+  get cardWidth(): string {
     return `calc(100% - ${this.dragTravel}px )`;
   }
 
   get buttonWidth(): string {
     return `${Math.abs(this.dragTravel - 4)}px`;
   }
-
-  // @HostListener("mousedown", ['$event'])
-  // @HostListener("mouseup", ["$event"])
-  // @HostListener("mousemove", ["$event"])
-  // handleClick(event: MouseEvent): void {
-  //   if (this.isTouchEnabled) {
-  //     return;
-  //   }
-  //   switch (event.type) {
-  //     case 'mousedown': {
-  //       this.pointerDown(event.screenX);
-  //       break;
-  //     }
-  //     case 'mouseup': {
-  //       this.pointerUp(event.screenX);
-  //       break;
-  //     }
-  //     case 'mousemove': {
-  //       this.pointerMove(event.screenX);
-  //       break;
-  //     }
-  //   }
-  // }
-
-  // @HostListener("touchstart", ["$event"])
-  // @HostListener("touchend", ["$event"])
-  // @HostListener("touchmove", ["$event"])
-  // handleTouch(event: TouchEvent): void {
-  //   if (!this.isTouchEnabled) {
-  //     return;
-  //   }
-
-  //   switch (event.type) {
-  //     case 'touchstart': {
-  //       this.pointerDown(event.changedTouches[0].screenX);
-  //       break;
-  //     }
-  //     case 'touchend': {
-  //       this.pointerUp(event.changedTouches[0].screenX);
-  //       break;
-  //     }
-  //     case 'touchmove': {
-  //       this.pointerMove(event.changedTouches[0].screenX);
-  //       break;
-  //     }
-  //   }
-  // }
 
   @HostListener("document:click", ['$event'])
   @HostListener("document:touch", ["$event"])
@@ -167,7 +119,6 @@ export class CardComponent implements OnInit {
       } else {
         this.dragTravel = positionX - this.startX;
       }
-      // this.swiping.emit(Math.abs(this.dragTravel) > this.blockVertialSwipeIfDragValueIs);
     }
   }
 
